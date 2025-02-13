@@ -128,6 +128,6 @@ func (r *EmployeeGetAll) Do() (resp EmployeeGetAllResponse, err error) {
 }
 
 type EmployeeGetAllResponse struct {
-	Http *http.Response
+	Response
 	Body Employees
 }

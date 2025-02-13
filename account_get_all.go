@@ -123,6 +123,6 @@ func (r *AccountGetAll) Do() (resp AccountGetAllResponse, err error) {
 }
 
 type AccountGetAllResponse struct {
-	Http *http.Response
+	Response
 	Body Accounts
 }

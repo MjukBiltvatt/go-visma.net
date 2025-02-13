@@ -123,7 +123,7 @@ func (r *SubaccountGetAll) Do() (resp SubaccountGetAllResponse, err error) {
 }
 
 type SubaccountGetAllResponse struct {
-	Http *http.Response
+	Response
 	Body SubaccountGetAllResponseBody
 }
 

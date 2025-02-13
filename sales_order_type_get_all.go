@@ -121,6 +121,6 @@ func (r *SalesOrderTypeGetAll) Do() (resp SalesOrderTypeGetAllResponse, err erro
 }
 
 type SalesOrderTypeGetAllResponse struct {
-	Http *http.Response
+	Response
 	Body SalesOrderTypes
 }

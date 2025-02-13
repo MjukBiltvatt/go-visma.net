@@ -162,6 +162,6 @@ func (r *JournalTransactionV2Post) Do() (resp JournalTransactionV2PostResponse, 
 }
 
 type JournalTransactionV2PostResponse struct {
-	Http *http.Response
+	Response
 	Body JournalTransactions
 }

@@ -126,6 +126,6 @@ func (r *CustomerInvoiceV2Post) Do() (resp CustomerInvoiceV2PostResponse, err er
 }
 
 type CustomerInvoiceV2PostResponse struct {
-	Http *http.Response
+	Response
 	Body JournalTransactions
 }

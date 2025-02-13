@@ -165,6 +165,6 @@ func (r *CustomerCreditNoteV2Post) Do() (resp CustomerCreditNoteV2PostResponse, 
 }
 
 type CustomerCreditNoteV2PostResponse struct {
-	Http *http.Response
+	Response
 	Body JournalTransactions
 }

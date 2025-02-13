@@ -128,6 +128,6 @@ func (r *DepartmentGetAll) Do() (resp DepartmentGetAllResponse, err error) {
 }
 
 type DepartmentGetAllResponse struct {
-	Http *http.Response
+	Response
 	Body Departments
 }

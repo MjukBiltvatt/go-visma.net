@@ -127,6 +127,6 @@ func (r *CustomerGetByCD) Do() (resp CustomerGetByCDResponse, err error) {
 }
 
 type CustomerGetByCDResponse struct {
-	Http *http.Response
+	Response
 	Body Customer
 }

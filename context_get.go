@@ -123,6 +123,6 @@ func (r *ContextGet) Do() (resp ContextGetResponse, err error) {
 }
 
 type ContextGetResponse struct {
-	Http *http.Response
+	Response
 	Body Context
 }

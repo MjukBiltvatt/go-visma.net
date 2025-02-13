@@ -122,6 +122,6 @@ func (r *LedgerGetAll) Do() (resp LedgerGetAllResponse, err error) {
 }
 
 type LedgerGetAllResponse struct {
-	Http *http.Response
+	Response
 	Body Ledgers
 }

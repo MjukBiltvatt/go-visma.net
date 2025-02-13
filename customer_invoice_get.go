@@ -125,7 +125,7 @@ func (r *CustomerInvoiceGet) Do() (resp CustomerInvoiceGetResponse, err error) {
 }
 
 type CustomerInvoiceGetResponse struct {
-	Http *http.Response
+	Response
 	Body CustomerInvoiceGetResponseBody
 }
 

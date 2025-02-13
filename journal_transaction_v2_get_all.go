@@ -124,6 +124,6 @@ func (r *JournalTransactionV2GetAll) Do() (resp JournalTransactionV2GetAllRespon
 }
 
 type JournalTransactionV2GetAllResponse struct {
-	Http *http.Response
+	Response
 	Body JournalTransactions
 }

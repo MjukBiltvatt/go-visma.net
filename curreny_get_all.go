@@ -122,6 +122,6 @@ func (r *CurrencyGetAll) Do() (resp CurrencyGetAllResponse, err error) {
 }
 
 type CurrencyGetAllResponse struct {
-	Http *http.Response
+	Response
 	Body Currencies
 }

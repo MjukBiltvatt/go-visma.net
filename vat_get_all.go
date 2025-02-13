@@ -123,6 +123,6 @@ func (r *VATGetAll) Do() (resp VATGetAllResponse, err error) {
 }
 
 type VATGetAllResponse struct {
-	Http *http.Response
+	Response
 	Body VATs
 }

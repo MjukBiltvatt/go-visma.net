@@ -220,6 +220,6 @@ func (r *CustomerCreditNoteGetAll) Do() (resp CustomerCreditNoteGetAllResponse, 
 }
 
 type CustomerCreditNoteGetAllResponse struct {
-	Http *http.Response
+	Response
 	Body CreditNotes
 }

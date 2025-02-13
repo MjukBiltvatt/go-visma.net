@@ -123,6 +123,6 @@ func (r *BranchGetAll) Do() (resp BranchGetAllResponse, err error) {
 }
 
 type BranchGetAllResponse struct {
-	Http *http.Response
+	Response
 	Body Branches
 }

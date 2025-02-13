@@ -128,6 +128,6 @@ func (r *CustomerGetAll) Do() (resp CustomerGetAllResponse, err error) {
 }
 
 type CustomerGetAllResponse struct {
-	Http *http.Response
+	Response
 	Body Customers
 }

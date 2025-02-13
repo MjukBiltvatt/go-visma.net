@@ -119,6 +119,6 @@ func (r *CustomerPost) Do() (resp CustomerPostResponse, err error) {
 }
 
 type CustomerPostResponse struct {
-	Http *http.Response
+	Response
 	Body struct{}
 }

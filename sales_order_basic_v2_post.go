@@ -163,6 +163,6 @@ func (r *SalesOrderBasicV2Post) Do() (resp SalesOrderBasicV2PostResponse, err er
 }
 
 type SalesOrderBasicV2PostResponse struct {
-	Http *http.Response
+	Response
 	Body JournalTransactions
 }

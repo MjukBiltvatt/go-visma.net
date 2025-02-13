@@ -123,6 +123,6 @@ func (r *FinancialperiodGet) Do() (resp FinancialperiodGetResponse, err error) {
 }
 
 type FinancialperiodGetResponse struct {
-	Http *http.Response
+	Response
 	Body FinancialPeriods
 }

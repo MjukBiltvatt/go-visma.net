@@ -123,6 +123,6 @@ func (r *ContextUserdetailsGet) Do() (resp ContextUserdetailsGetResponse, err er
 }
 
 type ContextUserdetailsGetResponse struct {
-	Http *http.Response
+	Response
 	Body ContextUserdetails
 }

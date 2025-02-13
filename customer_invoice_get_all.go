@@ -220,6 +220,6 @@ func (r *CustomerInvoiceGetAll) Do() (resp CustomerInvoiceGetAllResponse, err er
 }
 
 type CustomerInvoiceGetAllResponse struct {
-	Http *http.Response
+	Response
 	Body Invoices
 }
