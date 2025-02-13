@@ -105,31 +105,29 @@ func (r *CustomerGetAll) SetRequestBody(body CustomerGetAllBody) {
 	r.requestBody = body
 }
 
-func (r *CustomerGetAll) NewResponseBody() *CustomerGetAllResponseBody {
-	return &CustomerGetAllResponseBody{}
-}
-
-type CustomerGetAllResponseBody Customers
-
 func (r *CustomerGetAll) URL() *url.URL {
 	u := r.client.GetEndpointURL("/controller/api/v1/customer", r.PathParams())
 	return &u
 }
 
-func (r *CustomerGetAll) Do() (CustomerGetAllResponseBody, error) {
+func (r *CustomerGetAll) Do() (resp CustomerGetAllResponse, err error) {
 	// Create http request
 	req, err := r.client.NewRequest(nil, r)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
 	// Process query parameters
 	err = utils.AddQueryParamsToRequest(r.QueryParams(), req, false)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
-	responseBody := r.NewResponseBody()
-	_, err = r.client.Do(req, responseBody)
-	return *responseBody, err
+	resp.Http, err = r.client.Do(req, &resp.Body)
+	return resp, err
+}
+
+type CustomerGetAllResponse struct {
+	Http *http.Response
+	Body Customers
 }

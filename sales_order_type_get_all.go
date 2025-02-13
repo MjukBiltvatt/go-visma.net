@@ -98,31 +98,29 @@ func (r *SalesOrderTypeGetAll) SetRequestBody(body SalesOrderTypeGetAllBody) {
 	r.requestBody = body
 }
 
-func (r *SalesOrderTypeGetAll) NewResponseBody() *SalesOrderTypeGetAllResponseBody {
-	return &SalesOrderTypeGetAllResponseBody{}
-}
-
-type SalesOrderTypeGetAllResponseBody SalesOrderTypes
-
 func (r *SalesOrderTypeGetAll) URL() *url.URL {
 	u := r.client.GetEndpointURL("/controller/api/v1/salesordertype", r.PathParams())
 	return &u
 }
 
-func (r *SalesOrderTypeGetAll) Do() (SalesOrderTypeGetAllResponseBody, error) {
+func (r *SalesOrderTypeGetAll) Do() (resp SalesOrderTypeGetAllResponse, err error) {
 	// Create http request
 	req, err := r.client.NewRequest(nil, r)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
 	// Process query parameters
 	err = utils.AddQueryParamsToRequest(r.QueryParams(), req, false)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
-	responseBody := r.NewResponseBody()
-	_, err = r.client.Do(req, responseBody)
-	return *responseBody, err
+	resp.Http, err = r.client.Do(req, &resp.Body)
+	return resp, err
+}
+
+type SalesOrderTypeGetAllResponse struct {
+	Http *http.Response
+	Body SalesOrderTypes
 }

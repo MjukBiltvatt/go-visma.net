@@ -100,31 +100,29 @@ func (r *ContextUserdetailsGet) SetRequestBody(body ContextUserdetailsGetBody) {
 	r.requestBody = body
 }
 
-func (r *ContextUserdetailsGet) NewResponseBody() *ContextUserdetailsGetResponseBody {
-	return &ContextUserdetailsGetResponseBody{}
-}
-
-type ContextUserdetailsGetResponseBody ContextUserdetails
-
 func (r *ContextUserdetailsGet) URL() *url.URL {
 	u := r.client.GetEndpointURL("resources/v1/context/userdetails", r.PathParams())
 	return &u
 }
 
-func (r *ContextUserdetailsGet) Do() (ContextUserdetailsGetResponseBody, error) {
+func (r *ContextUserdetailsGet) Do() (resp ContextUserdetailsGetResponse, err error) {
 	// Create http request
 	req, err := r.client.NewRequest(nil, r)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
 	// Process query parameters
 	err = utils.AddQueryParamsToRequest(r.QueryParams(), req, false)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
-	responseBody := r.NewResponseBody()
-	_, err = r.client.Do(req, responseBody)
-	return *responseBody, err
+	resp.Http, err = r.client.Do(req, &resp.Body)
+	return resp, err
+}
+
+type ContextUserdetailsGetResponse struct {
+	Http *http.Response
+	Body ContextUserdetails
 }

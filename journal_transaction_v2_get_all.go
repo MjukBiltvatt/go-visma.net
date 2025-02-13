@@ -101,31 +101,29 @@ func (r *JournalTransactionV2GetAll) SetRequestBody(body JournalTransactionV2Get
 	r.requestBody = body
 }
 
-func (r *JournalTransactionV2GetAll) NewResponseBody() *JournalTransactionV2GetAllResponseBody {
-	return &JournalTransactionV2GetAllResponseBody{}
-}
-
-type JournalTransactionV2GetAllResponseBody JournalTransactions
-
 func (r *JournalTransactionV2GetAll) URL() *url.URL {
 	u := r.client.GetEndpointURL("/controller/api/v2/journaltransaction", r.PathParams())
 	return &u
 }
 
-func (r *JournalTransactionV2GetAll) Do() (JournalTransactionV2GetAllResponseBody, error) {
+func (r *JournalTransactionV2GetAll) Do() (resp JournalTransactionV2GetAllResponse, err error) {
 	// Create http request
 	req, err := r.client.NewRequest(nil, r)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
 	// Process query parameters
 	err = utils.AddQueryParamsToRequest(r.QueryParams(), req, false)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
-	responseBody := r.NewResponseBody()
-	_, err = r.client.Do(req, responseBody)
-	return *responseBody, err
+	resp.Http, err = r.client.Do(req, &resp.Body)
+	return resp, err
+}
+
+type JournalTransactionV2GetAllResponse struct {
+	Http *http.Response
+	Body JournalTransactions
 }

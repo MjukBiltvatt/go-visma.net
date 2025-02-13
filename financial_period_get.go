@@ -100,31 +100,29 @@ func (r *FinancialperiodGet) SetRequestBody(body FinancialperiodGetBody) {
 	r.requestBody = body
 }
 
-func (r *FinancialperiodGet) NewResponseBody() *FinancialperiodGetResponseBody {
-	return &FinancialperiodGetResponseBody{}
-}
-
-type FinancialperiodGetResponseBody FinancialPeriods
-
 func (r *FinancialperiodGet) URL() *url.URL {
 	u := r.client.GetEndpointURL("controller/api/v1/financialPeriod", r.PathParams())
 	return &u
 }
 
-func (r *FinancialperiodGet) Do() (FinancialperiodGetResponseBody, error) {
+func (r *FinancialperiodGet) Do() (resp FinancialperiodGetResponse, err error) {
 	// Create http request
 	req, err := r.client.NewRequest(nil, r)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
 	// Process query parameters
 	err = utils.AddQueryParamsToRequest(r.QueryParams(), req, false)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
-	responseBody := r.NewResponseBody()
-	_, err = r.client.Do(req, responseBody)
-	return *responseBody, err
+	resp.Http, err = r.client.Do(req, &resp.Body)
+	return resp, err
+}
+
+type FinancialperiodGetResponse struct {
+	Http *http.Response
+	Body FinancialPeriods
 }

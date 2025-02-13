@@ -197,31 +197,29 @@ func (r *CustomerInvoiceGetAll) SetRequestBody(body CustomerInvoiceGetAllBody) {
 	r.requestBody = body
 }
 
-func (r *CustomerInvoiceGetAll) NewResponseBody() *CustomerInvoiceGetAllResponseBody {
-	return &CustomerInvoiceGetAllResponseBody{}
-}
-
-type CustomerInvoiceGetAllResponseBody Invoices
-
 func (r *CustomerInvoiceGetAll) URL() *url.URL {
 	u := r.client.GetEndpointURL("/controller/api/v1/customerinvoice", r.PathParams())
 	return &u
 }
 
-func (r *CustomerInvoiceGetAll) Do() (CustomerInvoiceGetAllResponseBody, error) {
+func (r *CustomerInvoiceGetAll) Do() (resp CustomerInvoiceGetAllResponse, err error) {
 	// Create http request
 	req, err := r.client.NewRequest(nil, r)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
 	// Process query parameters
 	err = utils.AddQueryParamsToRequest(r.QueryParams(), req, false)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
-	responseBody := r.NewResponseBody()
-	_, err = r.client.Do(req, responseBody)
-	return *responseBody, err
+	resp.Http, err = r.client.Do(req, &resp.Body)
+	return resp, err
+}
+
+type CustomerInvoiceGetAllResponse struct {
+	Http *http.Response
+	Body Invoices
 }

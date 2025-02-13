@@ -103,31 +103,29 @@ func (r *CustomerInvoiceV2Post) SetRequestBody(body CustomerInvoiceV2PostBody) {
 	r.requestBody = body
 }
 
-func (r *CustomerInvoiceV2Post) NewResponseBody() *CustomerInvoiceV2PostResponseBody {
-	return &CustomerInvoiceV2PostResponseBody{}
-}
-
-type CustomerInvoiceV2PostResponseBody JournalTransactions
-
 func (r *CustomerInvoiceV2Post) URL() *url.URL {
 	u := r.client.GetEndpointURL("/controller/api/v2/customerinvoice", r.PathParams())
 	return &u
 }
 
-func (r *CustomerInvoiceV2Post) Do() (CustomerInvoiceV2PostResponseBody, error) {
+func (r *CustomerInvoiceV2Post) Do() (resp CustomerInvoiceV2PostResponse, err error) {
 	// Create http request
 	req, err := r.client.NewRequest(nil, r)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
 	// Process query parameters
 	err = utils.AddQueryParamsToRequest(r.QueryParams(), req, false)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
-	responseBody := r.NewResponseBody()
-	_, err = r.client.Do(req, responseBody)
-	return *responseBody, err
+	resp.Http, err = r.client.Do(req, &resp.Body)
+	return resp, err
+}
+
+type CustomerInvoiceV2PostResponse struct {
+	Http *http.Response
+	Body JournalTransactions
 }

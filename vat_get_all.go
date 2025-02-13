@@ -100,31 +100,29 @@ func (r *VATGetAll) SetRequestBody(body VATGetAllBody) {
 	r.requestBody = body
 }
 
-func (r *VATGetAll) NewResponseBody() *VATGetAllResponseBody {
-	return &VATGetAllResponseBody{}
-}
-
-type VATGetAllResponseBody VATs
-
 func (r *VATGetAll) URL() *url.URL {
 	u := r.client.GetEndpointURL("controller/api/v1/vat", r.PathParams())
 	return &u
 }
 
-func (r *VATGetAll) Do() (VATGetAllResponseBody, error) {
+func (r *VATGetAll) Do() (resp VATGetAllResponse, err error) {
 	// Create http request
 	req, err := r.client.NewRequest(nil, r)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
 	// Process query parameters
 	err = utils.AddQueryParamsToRequest(r.QueryParams(), req, false)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
-	responseBody := r.NewResponseBody()
-	_, err = r.client.Do(req, responseBody)
-	return *responseBody, err
+	resp.Http, err = r.client.Do(req, &resp.Body)
+	return resp, err
+}
+
+type VATGetAllResponse struct {
+	Http *http.Response
+	Body VATs
 }

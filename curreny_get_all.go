@@ -99,31 +99,29 @@ func (r *CurrencyGetAll) SetRequestBody(body CurrencyGetAllBody) {
 	r.requestBody = body
 }
 
-func (r *CurrencyGetAll) NewResponseBody() *CurrencyGetAllResponseBody {
-	return &CurrencyGetAllResponseBody{}
-}
-
-type CurrencyGetAllResponseBody Currencies
-
 func (r *CurrencyGetAll) URL() *url.URL {
 	u := r.client.GetEndpointURL("/controller/api/v1/currency", r.PathParams())
 	return &u
 }
 
-func (r *CurrencyGetAll) Do() (CurrencyGetAllResponseBody, error) {
+func (r *CurrencyGetAll) Do() (resp CurrencyGetAllResponse, err error) {
 	// Create http request
 	req, err := r.client.NewRequest(nil, r)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
 	// Process query parameters
 	err = utils.AddQueryParamsToRequest(r.QueryParams(), req, false)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
-	responseBody := r.NewResponseBody()
-	_, err = r.client.Do(req, responseBody)
-	return *responseBody, err
+	resp.Http, err = r.client.Do(req, &resp.Body)
+	return resp, err
+}
+
+type CurrencyGetAllResponse struct {
+	Http *http.Response
+	Body Currencies
 }

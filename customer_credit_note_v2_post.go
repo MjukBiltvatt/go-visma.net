@@ -142,31 +142,29 @@ func (r *CustomerCreditNoteV2Post) SetRequestBody(body CustomerCreditNoteV2PostB
 	r.requestBody = body
 }
 
-func (r *CustomerCreditNoteV2Post) NewResponseBody() *CustomerCreditNoteV2PostResponseBody {
-	return &CustomerCreditNoteV2PostResponseBody{}
-}
-
-type CustomerCreditNoteV2PostResponseBody JournalTransactions
-
 func (r *CustomerCreditNoteV2Post) URL() *url.URL {
 	u := r.client.GetEndpointURL("/controller/api/v2/customerCreditNote", r.PathParams())
 	return &u
 }
 
-func (r *CustomerCreditNoteV2Post) Do() (CustomerCreditNoteV2PostResponseBody, error) {
+func (r *CustomerCreditNoteV2Post) Do() (resp CustomerCreditNoteV2PostResponse, err error) {
 	// Create http request
 	req, err := r.client.NewRequest(nil, r)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
 	// Process query parameters
 	err = utils.AddQueryParamsToRequest(r.QueryParams(), req, false)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
-	responseBody := r.NewResponseBody()
-	_, err = r.client.Do(req, responseBody)
-	return *responseBody, err
+	resp.Http, err = r.client.Do(req, &resp.Body)
+	return resp, err
+}
+
+type CustomerCreditNoteV2PostResponse struct {
+	Http *http.Response
+	Body JournalTransactions
 }

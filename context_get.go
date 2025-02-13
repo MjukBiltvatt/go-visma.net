@@ -100,31 +100,29 @@ func (r *ContextGet) SetRequestBody(body ContextGetBody) {
 	r.requestBody = body
 }
 
-func (r *ContextGet) NewResponseBody() *ContextGetResponseBody {
-	return &ContextGetResponseBody{}
-}
-
-type ContextGetResponseBody Context
-
 func (r *ContextGet) URL() *url.URL {
 	u := r.client.GetEndpointURL("resources/v1/context", r.PathParams())
 	return &u
 }
 
-func (r *ContextGet) Do() (ContextGetResponseBody, error) {
+func (r *ContextGet) Do() (resp ContextGetResponse, err error) {
 	// Create http request
 	req, err := r.client.NewRequest(nil, r)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
 	// Process query parameters
 	err = utils.AddQueryParamsToRequest(r.QueryParams(), req, false)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
-	responseBody := r.NewResponseBody()
-	_, err = r.client.Do(req, responseBody)
-	return *responseBody, err
+	resp.Http, err = r.client.Do(req, &resp.Body)
+	return resp, err
+}
+
+type ContextGetResponse struct {
+	Http *http.Response
+	Body Context
 }

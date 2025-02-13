@@ -140,31 +140,29 @@ func (r *SalesOrderBasicV2Post) SetRequestBody(body SalesOrderBasicV2PostBody) {
 	r.requestBody = body
 }
 
-func (r *SalesOrderBasicV2Post) NewResponseBody() *SalesOrderBasicV2PostResponseBody {
-	return &SalesOrderBasicV2PostResponseBody{}
-}
-
-type SalesOrderBasicV2PostResponseBody JournalTransactions
-
 func (r *SalesOrderBasicV2Post) URL() *url.URL {
 	u := r.client.GetEndpointURL("/controller/api/v2/salesorderbasic", r.PathParams())
 	return &u
 }
 
-func (r *SalesOrderBasicV2Post) Do() (SalesOrderBasicV2PostResponseBody, error) {
+func (r *SalesOrderBasicV2Post) Do() (resp SalesOrderBasicV2PostResponse, err error) {
 	// Create http request
 	req, err := r.client.NewRequest(nil, r)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
 	// Process query parameters
 	err = utils.AddQueryParamsToRequest(r.QueryParams(), req, false)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
-	responseBody := r.NewResponseBody()
-	_, err = r.client.Do(req, responseBody)
-	return *responseBody, err
+	resp.Http, err = r.client.Do(req, &resp.Body)
+	return resp, err
+}
+
+type SalesOrderBasicV2PostResponse struct {
+	Http *http.Response
+	Body JournalTransactions
 }

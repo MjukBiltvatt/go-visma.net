@@ -100,8 +100,31 @@ func (r *SubaccountGetAll) SetRequestBody(body SubaccountGetAllBody) {
 	r.requestBody = body
 }
 
-func (r *SubaccountGetAll) NewResponseBody() *SubaccountGetAllResponseBody {
-	return &SubaccountGetAllResponseBody{}
+func (r *SubaccountGetAll) URL() *url.URL {
+	u := r.client.GetEndpointURL("controller/api/v1/subaccount", r.PathParams())
+	return &u
+}
+
+func (r *SubaccountGetAll) Do() (resp SubaccountGetAllResponse, err error) {
+	// Create http request
+	req, err := r.client.NewRequest(nil, r)
+	if err != nil {
+		return resp, err
+	}
+
+	// Process query parameters
+	err = utils.AddQueryParamsToRequest(r.QueryParams(), req, false)
+	if err != nil {
+		return resp, err
+	}
+
+	resp.Http, err = r.client.Do(req, &resp.Body)
+	return resp, err
+}
+
+type SubaccountGetAllResponse struct {
+	Http *http.Response
+	Body SubaccountGetAllResponseBody
 }
 
 type SubaccountGetAllResponseBody []struct {
@@ -118,27 +141,4 @@ type SubaccountGetAllResponseBody []struct {
 	} `json:"segments"`
 	ErrorInfo string   `json:"errorInfo"`
 	Metadata  Metadata `json:"metadata"`
-}
-
-func (r *SubaccountGetAll) URL() *url.URL {
-	u := r.client.GetEndpointURL("controller/api/v1/subaccount", r.PathParams())
-	return &u
-}
-
-func (r *SubaccountGetAll) Do() (SubaccountGetAllResponseBody, error) {
-	// Create http request
-	req, err := r.client.NewRequest(nil, r)
-	if err != nil {
-		return *r.NewResponseBody(), err
-	}
-
-	// Process query parameters
-	err = utils.AddQueryParamsToRequest(r.QueryParams(), req, false)
-	if err != nil {
-		return *r.NewResponseBody(), err
-	}
-
-	responseBody := r.NewResponseBody()
-	_, err = r.client.Do(req, responseBody)
-	return *responseBody, err
 }

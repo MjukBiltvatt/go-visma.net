@@ -96,31 +96,29 @@ func (r *CustomerPost) SetRequestBody(body CustomerPostBody) {
 	r.requestBody = body
 }
 
-func (r *CustomerPost) NewResponseBody() *CustomerPostResponseBody {
-	return &CustomerPostResponseBody{}
-}
-
-type CustomerPostResponseBody struct{}
-
 func (r *CustomerPost) URL() *url.URL {
 	u := r.client.GetEndpointURL("/controller/api/v1/customer", r.PathParams())
 	return &u
 }
 
-func (r *CustomerPost) Do() (CustomerPostResponseBody, error) {
+func (r *CustomerPost) Do() (resp CustomerPostResponse, err error) {
 	// Create http request
 	req, err := r.client.NewRequest(nil, r)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
 	// Process query parameters
 	err = utils.AddQueryParamsToRequest(r.QueryParams(), req, false)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
-	responseBody := r.NewResponseBody()
-	_, err = r.client.Do(req, responseBody)
-	return *responseBody, err
+	resp.Http, err = r.client.Do(req, &resp.Body)
+	return resp, err
+}
+
+type CustomerPostResponse struct {
+	Http *http.Response
+	Body struct{}
 }

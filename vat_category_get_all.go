@@ -100,31 +100,29 @@ func (r *VATCategoryGetAll) SetRequestBody(body VATCategoryGetAllBody) {
 	r.requestBody = body
 }
 
-func (r *VATCategoryGetAll) NewResponseBody() *VATCategoryGetAllResponseBody {
-	return &VATCategoryGetAllResponseBody{}
-}
-
-type VATCategoryGetAllResponseBody VATCategories
-
 func (r *VATCategoryGetAll) URL() *url.URL {
 	u := r.client.GetEndpointURL("controller/api/v1/vatCategory", r.PathParams())
 	return &u
 }
 
-func (r *VATCategoryGetAll) Do() (VATCategoryGetAllResponseBody, error) {
+func (r *VATCategoryGetAll) Do() (resp VATCategoryGetAllResponse, err error) {
 	// Create http request
 	req, err := r.client.NewRequest(nil, r)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
 	// Process query parameters
 	err = utils.AddQueryParamsToRequest(r.QueryParams(), req, false)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
-	responseBody := r.NewResponseBody()
-	_, err = r.client.Do(req, responseBody)
-	return *responseBody, err
+	resp.Http, err = r.client.Do(req, &resp.Body)
+	return resp, err
+}
+
+type VATCategoryGetAllResponse struct {
+	Http *http.Response
+	Body VATCategories
 }

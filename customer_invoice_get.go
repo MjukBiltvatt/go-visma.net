@@ -102,8 +102,31 @@ func (r *CustomerInvoiceGet) SetRequestBody(body CustomerInvoiceGetBody) {
 	r.requestBody = body
 }
 
-func (r *CustomerInvoiceGet) NewResponseBody() *CustomerInvoiceGetResponseBody {
-	return &CustomerInvoiceGetResponseBody{}
+func (r *CustomerInvoiceGet) URL() *url.URL {
+	u := r.client.GetEndpointURL("/controller/api/v1/customerinvoice/{{.invoice_number}}", r.PathParams())
+	return &u
+}
+
+func (r *CustomerInvoiceGet) Do() (resp CustomerInvoiceGetResponse, err error) {
+	// Create http request
+	req, err := r.client.NewRequest(nil, r)
+	if err != nil {
+		return resp, err
+	}
+
+	// Process query parameters
+	err = utils.AddQueryParamsToRequest(r.QueryParams(), req, false)
+	if err != nil {
+		return resp, err
+	}
+
+	resp.Http, err = r.client.Do(req, &resp.Body)
+	return resp, err
+}
+
+type CustomerInvoiceGetResponse struct {
+	Http *http.Response
+	Body CustomerInvoiceGetResponseBody
 }
 
 type CustomerInvoiceGetResponseBody struct {
@@ -273,27 +296,4 @@ type CustomerInvoiceGetResponseBody struct {
 		TotalCount  int `json:"totalCount"`
 		MaxPageSize int `json:"maxPageSize"`
 	} `json:"metadata"`
-}
-
-func (r *CustomerInvoiceGet) URL() *url.URL {
-	u := r.client.GetEndpointURL("/controller/api/v1/customerinvoice/{{.invoice_number}}", r.PathParams())
-	return &u
-}
-
-func (r *CustomerInvoiceGet) Do() (CustomerInvoiceGetResponseBody, error) {
-	// Create http request
-	req, err := r.client.NewRequest(nil, r)
-	if err != nil {
-		return *r.NewResponseBody(), err
-	}
-
-	// Process query parameters
-	err = utils.AddQueryParamsToRequest(r.QueryParams(), req, false)
-	if err != nil {
-		return *r.NewResponseBody(), err
-	}
-
-	responseBody := r.NewResponseBody()
-	_, err = r.client.Do(req, responseBody)
-	return *responseBody, err
 }

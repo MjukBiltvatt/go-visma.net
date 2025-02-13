@@ -104,31 +104,29 @@ func (r *CustomerGetByCD) SetRequestBody(body CustomerGetByCDBody) {
 	r.requestBody = body
 }
 
-func (r *CustomerGetByCD) NewResponseBody() *CustomerGetByCDResponseBody {
-	return &CustomerGetByCDResponseBody{}
-}
-
-type CustomerGetByCDResponseBody Customer
-
 func (r *CustomerGetByCD) URL() *url.URL {
 	u := r.client.GetEndpointURL("/controller/api/v1/customer/{{.customer_cd}}", r.PathParams())
 	return &u
 }
 
-func (r *CustomerGetByCD) Do() (CustomerGetByCDResponseBody, error) {
+func (r *CustomerGetByCD) Do() (resp CustomerGetByCDResponse, err error) {
 	// Create http request
 	req, err := r.client.NewRequest(nil, r)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
 	// Process query parameters
 	err = utils.AddQueryParamsToRequest(r.QueryParams(), req, false)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
-	responseBody := r.NewResponseBody()
-	_, err = r.client.Do(req, responseBody)
-	return *responseBody, err
+	resp.Http, err = r.client.Do(req, &resp.Body)
+	return resp, err
+}
+
+type CustomerGetByCDResponse struct {
+	Http *http.Response
+	Body Customer
 }

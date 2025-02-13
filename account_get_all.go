@@ -100,31 +100,29 @@ func (r *AccountGetAll) SetRequestBody(body AccountGetAllBody) {
 	r.requestBody = body
 }
 
-func (r *AccountGetAll) NewResponseBody() *AccountGetAllResponseBody {
-	return &AccountGetAllResponseBody{}
-}
-
-type AccountGetAllResponseBody Accounts
-
 func (r *AccountGetAll) URL() *url.URL {
 	u := r.client.GetEndpointURL("controller/api/v1/account", r.PathParams())
 	return &u
 }
 
-func (r *AccountGetAll) Do() (AccountGetAllResponseBody, error) {
+func (r *AccountGetAll) Do() (resp AccountGetAllResponse, err error) {
 	// Create http request
 	req, err := r.client.NewRequest(nil, r)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
 	// Process query parameters
 	err = utils.AddQueryParamsToRequest(r.QueryParams(), req, false)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
-	responseBody := r.NewResponseBody()
-	_, err = r.client.Do(req, responseBody)
-	return *responseBody, err
+	resp.Http, err = r.client.Do(req, &resp.Body)
+	return resp, err
+}
+
+type AccountGetAllResponse struct {
+	Http *http.Response
+	Body Accounts
 }

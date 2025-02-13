@@ -100,31 +100,29 @@ func (r *BranchGetAll) SetRequestBody(body BranchGetAllBody) {
 	r.requestBody = body
 }
 
-func (r *BranchGetAll) NewResponseBody() *BranchGetAllResponseBody {
-	return &BranchGetAllResponseBody{}
-}
-
-type BranchGetAllResponseBody Branches
-
 func (r *BranchGetAll) URL() *url.URL {
 	u := r.client.GetEndpointURL("controller/api/v1/branch", r.PathParams())
 	return &u
 }
 
-func (r *BranchGetAll) Do() (BranchGetAllResponseBody, error) {
+func (r *BranchGetAll) Do() (resp BranchGetAllResponse, err error) {
 	// Create http request
 	req, err := r.client.NewRequest(nil, r)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
 	// Process query parameters
 	err = utils.AddQueryParamsToRequest(r.QueryParams(), req, false)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
-	responseBody := r.NewResponseBody()
-	_, err = r.client.Do(req, responseBody)
-	return *responseBody, err
+	resp.Http, err = r.client.Do(req, &resp.Body)
+	return resp, err
+}
+
+type BranchGetAllResponse struct {
+	Http *http.Response
+	Body Branches
 }

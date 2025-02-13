@@ -99,31 +99,29 @@ func (r *LedgerGetAll) SetRequestBody(body LedgerGetAllBody) {
 	r.requestBody = body
 }
 
-func (r *LedgerGetAll) NewResponseBody() *LedgerGetAllResponseBody {
-	return &LedgerGetAllResponseBody{}
-}
-
-type LedgerGetAllResponseBody Ledgers
-
 func (r *LedgerGetAll) URL() *url.URL {
 	u := r.client.GetEndpointURL("/controller/api/v1/ledger", r.PathParams())
 	return &u
 }
 
-func (r *LedgerGetAll) Do() (LedgerGetAllResponseBody, error) {
+func (r *LedgerGetAll) Do() (resp LedgerGetAllResponse, err error) {
 	// Create http request
 	req, err := r.client.NewRequest(nil, r)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
 	// Process query parameters
 	err = utils.AddQueryParamsToRequest(r.QueryParams(), req, false)
 	if err != nil {
-		return *r.NewResponseBody(), err
+		return resp, err
 	}
 
-	responseBody := r.NewResponseBody()
-	_, err = r.client.Do(req, responseBody)
-	return *responseBody, err
+	resp.Http, err = r.client.Do(req, &resp.Body)
+	return resp, err
+}
+
+type LedgerGetAllResponse struct {
+	Http *http.Response
+	Body Ledgers
 }
