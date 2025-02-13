@@ -6,7 +6,17 @@ type Response struct {
 	Http *http.Response
 }
 
-// NotFound determines if the response status is 404 Not Found
-func (r *Response) NotFound() bool {
-	return r.Http.StatusCode == http.StatusNotFound
+// StatusCode returns the http status
+func (r *Response) Status() string {
+	return r.Http.Status
+}
+
+// StatusCode returns the http status code
+func (r *Response) StatusCode() int {
+	return r.Http.StatusCode
+}
+
+// IsStatus determines if the http status code is equal to the given code
+func (r *Response) IsStatus(code int) bool {
+	return r.StatusCode() == code
 }
