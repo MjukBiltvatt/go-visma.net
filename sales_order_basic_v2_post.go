@@ -90,7 +90,7 @@ type SalesOrderBasicV2PostBody struct {
 		Operation       string      `json:"operation"`
 		LineNumber      ValueInt    `json:"lineNbr"`
 		InventoryID     ValueString `json:"inventoryId"`
-		InventoryNumber ValueString `json:"inventoryId"`
+		InventoryNumber ValueString `json:"inventoryNumber"`
 		Warehouse       ValueString `json:"warehouse"`
 		UOM             ValueString `json:"uom"`
 		Quantity        ValueInt    `json:"quantity"`
